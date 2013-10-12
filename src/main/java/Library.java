@@ -5,6 +5,10 @@
  * @author ihoneymon, @date 13. 10. 12 오후 9:26
  */
 public class Library {
+    public static void main(String[] args) {
+        System.out.println("Hello world, " + args[0]);
+    }
+
     public boolean someLibraryMethod() {
         return true;
     }
