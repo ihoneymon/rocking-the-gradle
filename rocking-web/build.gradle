@@ -1,5 +1,4 @@
 apply plugin: 'war'
-apply plugin: 'eclipse-wtp'
 
 eclipse {
     classpath {
@@ -18,5 +17,6 @@ eclipse {
 }
 
 dependencies {
+    compile project(':rocking-core')
     providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
 }
