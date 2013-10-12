@@ -1,25 +1,9 @@
 rocking-the-gradle
 ==================
 
-### ● Step04: 테스트test
-* 기본 작성된 테스트 실행
-```
-./gradlew test
-./gradlew test -Dtest.single=LibraryTest
-```
-* 참고: [Java Command-line options](http://docs.oracle.com/javase/7/docs/technotes/tools/windows/java.html#CBBIJCHG)
-
-* Library.java add 메소드 작성
-```
-public int add(int first, int second) {
-	return first + second;
-}
-```
-* LibraryTest.java add 테스트 코드 작성 및 확인
-```
-@Test
-public void testAddMethod() {
-	Library library = new Library();
-    assertEquals(library.add(2,3), 5);
-}
-```
+### ● Step05: 이클립스Eclipse 설정
+* build.gradle 에 'eclipse' 플러그인 추가
+* ```./gradlew tasks``` 를 통해서 IDE tasks에 eclipse 관련항목 추가 확인
+* ```./gradlew eclipse``` 태스크 실행
+* 이클립스 프로젝트 추가
+* 이클립스 외부툴에 프로그램 추가
