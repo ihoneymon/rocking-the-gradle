@@ -1,0 +1,31 @@
+allprojects {
+  group = 'org.ksug.springcamp.gradle'
+  version = '0.0.1.SNAP-SHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse'
+
+
+    ext {
+        javaVersion = '1.7'
+    }
+
+    buildDir = 'build' // 기본값
+
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'org.slf4j:slf4j-api:1.7.5'
+        testCompile "junit:junit:4.11"
+    }
+
+    tasks.eclipse.dependsOn cleanEclipse
+}
