@@ -1,86 +1,80 @@
 rocking-the-gradle
 ==================
 
-### ● Step06: 멀티 프로젝트 전환(도메인 프로젝트+웹 프로젝트)
-1. rocking-core 디렉토리 생성 및 파일 이동
-```
-mkdir rocking-core
-mv build.gradle src rocking-core/
-```
+### ● Step07: build.gradle 정리 및 프로젝트 의존성 지정
+* ./build.gradle: allprojects vs subprojects
 
-2. rocking-web 디렉토리 생성 및 gradle 자바 프로젝트 생성
 ```
-mkdir rocking-web
-cd rocking-web
-gradle setupBuild --type java-library
-# 불필요한 파일 제거
-rm settings.gradle
-rm gradlew*
-rm -rf gradle
-//web 기본디렉토리
-mkdir -p src/main/webapp/WEB-INF
-```
+allprojects {
+    group = 'org.ksug.springcamp.gradle'
+    version = '0.0.1-SNAPSHOT'
+}
 
-3. rocking-web/build.gradle 에 이클립스 설정 추가
-
-    ```
+subprojects {    
     apply plugin: 'java'
-    apply plugin: 'war'
     apply plugin: 'eclipse'
     apply plugin: 'eclipse-wtp'
-    
-    buildDir = "build"
-    
-    eclipse {
-        classpath {
-            downloadSources = true
-            defaultOutputDir = file("${buildDir}/classes/main")
-        }   
-        wtp {
-            component {
-                contextPath = '/'
-            }
-            facet {
-                facet name: 'jst.web', version: '3.0'
-                facet name: 'java', version: '1.7'
-            }
-        }    
-    }
-    
+
     repositories {
         mavenCentral()
     }
+
+    ext {
+      javaVersion = '1.7'
+    }
+
+    buildDir = 'build' // 기본값
+
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
     
     dependencies {
         compile 'org.slf4j:slf4j-api:1.7.5'
         testCompile "junit:junit:4.11"
-        providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
     }
-    ```
 
-4. ./settins.gradle 에 rocking-core, rocking-web 추가
-```
-rootProject.name = 'rocking-the-gradle'
-include ':rocking-core', ':rocking-web'
-// include 'rocking-core'
-// include 'rocking-web'
+    tasks.eclipse.dependsOn cleanEclipse
+}
 ```
 
-6. 기존 이클립스 프로젝트 제거
+* ./rocking-core/build.gradle
+
 ```
-rm -rf .classpath .project .settings
+// JavaExec라는 Task 클래스를 상속하여 태스크 생성
+// http://www.gradle.org/docs/current/dsl/org.gradle.api.tasks.JavaExec.html
+task runLibrary(type: JavaExec) {
+  main = "Library"
+  classpath += sourceSets.main.runtimeClasspath
+  args "Gradle"
+}
 ```
 
-7. 이클립스 프로젝트 설정
+* ./rocking-web/build.gradle
+
 ```
-./gradlew eclipse
+apply plugin: 'war'
+
+eclipse {
+    classpath {
+        downloadSources = true
+        defaultOutputDir = file('${buildDir}/classes/main')
+    }
+    wtp {
+        component {
+            contextPath = '/'
+        }
+        facet {
+            facet name: 'jst.web', version: '3.0' 
+            facet name: 'java', version: '1.7'
+        }
+    }
+}
+
+dependencies {
+    compile project(":rocking-core")
+    compile springframeworks
+    
+    providedCompile "javax.servlet:javax.servlet-api:3.0.1"
+}
 ```
-
-8. 이클립스 실행 후 프로젝트 추가
-
-9. 서블릿 생성 후 실행
-* RockingTheGradleServlet.java
-* home.jsp
-
-*****
-* 참조: [Gradle Multiproject](http://www.gradle.org/docs/current/userguide/multi_project_builds.html)
