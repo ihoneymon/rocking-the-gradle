@@ -4,19 +4,29 @@ eclipse {
     classpath {
         downloadSources = true
         defaultOutputDir = file("${buildDir}/classes/main")
-    }   
+    }
     wtp {
         component {
-            contextPath = '/'
+            contextPath = "/"
         }
         facet {
-            facet name: 'jst.web', version: '3.0'
-            facet name: 'java', version: '1.7'
+            facet name: 'jst.web', version: '3.0' // Servlet Spec Version 지정
+            facet name: 'jst.java', version: '1.7' // Java Version 지정
         }
-    }    
+    }
 }
 
+def springframeworks = [    
+    "org.springframework:spring-web:3.2.4.RELEASE",
+    "org.springframework:spring-webmvc:3.2.4.RELEASE"
+]
+
 dependencies {
-    compile project(':rocking-core')
-    providedCompile 'javax.servlet:javax.servlet-api:3.0.1'
+    compile project(":rocking-core") 
+    compile springframeworks      
+    providedCompile "javax.servlet:javax.servlet-api:3.0.1"
+    /**
+     * Logback을 사용하기 때문에 모든 의존성 라이브러리에서 common-logging는 제외
+     */
+    [configurations.runtime, configurations.default]*.exclude(module: 'commons-logging')
 }
