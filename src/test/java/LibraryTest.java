@@ -12,4 +12,10 @@ public class LibraryTest {
         Library classUnderTest = new Library();
         assertTrue("someLibraryMethod should return 'true'", classUnderTest.someLibraryMethod());
     }
+    
+    @Test
+    public void testAddMethod() {
+        Library library = new Library();
+        assertEquals(library.add(2, 3), 5);
+    }
 }
