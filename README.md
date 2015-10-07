@@ -448,7 +448,7 @@ dependencies {
         compile "ch.qos.logback:logback-classic:1.0.13"
     
         /**
-         * Google Guava(Collecton Utils): http://code.google.com/p/guava-libraries/
+         * Google Guava(Collection Utils): http://code.google.com/p/guava-libraries/
          */
         compile "com.google.guava:guava:14.0.1"
         
